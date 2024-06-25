@@ -1,0 +1,1 @@
+Problemet i den ursprungliga filen var att ett förväntat semikolon hade utlämnats. Detta innebar att kompilatorn inte förstod att raden var slut, och fortsatte att läsa koden som om det vore samma rad; alltså läste den "a = 0cout << 'a = '" o.s.v. under kompileringen, vilket huvudsakligen inte fungerar eftersom "0cout" inte är en integer. 
