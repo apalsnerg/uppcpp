@@ -2,6 +2,10 @@
 
 using namespace std;
 
+int timeToSeconds(int hours, int minutes, int seconds) {
+return ((hours × 60) + minutes) × 60 + seconds;
+}
+
 int main() {
 
     int winningRunner;
@@ -37,20 +41,21 @@ int main() {
         int curElapsedSeconds = (endSec > startSec) ? endSec - startSec : 60 - startSec + endSec;
 
         /*
-         * If this runner had a lower hour, minute, and second, then update winner
-         * Pretty sure it'll be if hour lower => if minute lower => if second lower,
-         * but if the hour is lower, it's a winner regardless
-         * Maybe if hour is equal, check minutes, then seconds, if any is lower then winner?
-         * Kinda ugly but should do the trick
-         * 
-         * TODO: Figure this out
+         * Instead of wasting time comparing hours and minutes and seconds, convert to just seconds and see which is bigger
          */
-        if ()
+        curSecs = timeToSeconds(curElapsedHours, curElapsedMinutes, curElapsedSeconds);
+        curWinSecs = timeToSeconds(elapsedHours, elapsedMinutes, elapsedSeconds);
 
-        elapsedHours = curElapsedHours;
-        elapsedMinutes = curElapsedMinutes;
-        elapsedSeconds = curElapsedSeconds;
-        winningRunner = currentRunner;
+        if(curSecs < curWinSecs) {
+            elapsedHours = curElapsedHours;
+            elapsedMinutes = curElapsedMinutes;
+            elapsedSeconds = curElapsedSeconds;
+            winningRunner = currentRunner;
+        }
+    }
+    if (noOfComps == 0) {
+        cout << "No competitors were entered." << "\n";
+        return 0;
     }
 
     cout << "Winner is starting number: " << winningRunner << "\n";
