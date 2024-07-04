@@ -6,28 +6,56 @@ int main() {
 
     int winningRunner;
 
-    int startHour = 0;
-    int startMin = 0;
-    int startSec = 0;
+    int noOfComps;
 
-    int endHour = 0;
-    int endMin = 0;
-    int endSec = 0;
-    
-    int currentRunner = 999;
+    int elapsedHours;
+    int elapsedMinutes;
+    int elapsedSeconds;
 
-    while (currentRunner > 0) {
+    while (true) {
         cout << "Enter a runner number: " << "\n" << ">> ";
+        int currentRunner;
         cin >> currentRunner;
+        if (currentRunner < 1) {
+            break;
+        }
 
+        int startHour, startMin, startSec;
         cout << "Enter the time they started: " << "\n" << ">> ";
         cin >> startHour >> startMin >> startSec;
 
+        int endHour, endMin, endSec;
         cout << "Enter the time they finished: " << "\n" << ">> ";
         cin >> endHour >> endMin >> endSec;
 
-        
+        noOfComps += 1;
+
+        int curElapsedHours = (endHour > startHour) ? endHour - startHour : 24 - endHour + startHour;
+
+        int curElapsedMinutes = (endMin > startMin) ? endMin - startMin : 60 - startMin + endMin;
+
+        int curElapsedSeconds = (endSec > startSec) ? endSec - startSec : 60 - startSec + endSec;
+
+        /*
+         * If this runner had a lower hour, minute, and second, then update winner
+         * Pretty sure it'll be if hour lower => if minute lower => if second lower,
+         * but if the hour is lower, it's a winner regardless
+         * Maybe if hour is equal, check minutes, then seconds, if any is lower then winner?
+         * Kinda ugly but should do the trick
+         * 
+         * TODO: Figure this out
+         */
+        if ()
+
+        elapsedHours = curElapsedHours;
+        elapsedMinutes = curElapsedMinutes;
+        elapsedSeconds = curElapsedSeconds;
+        winningRunner = currentRunner;
     }
+
+    cout << "Winner is starting number: " << winningRunner << "\n";
+    cout << "Time elapsed: " << elapsedHours << ":" << elapsedMinutes << ":" << elapsedSeconds << "\n";
+    cout << "Number of competitors: " << noOfComps << "\n";
     return 0;
 }
 
