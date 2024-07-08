@@ -3,7 +3,7 @@
 using namespace std;
 
 int timeToSeconds(int hours, int minutes, int seconds) {
-return ((hours × 60) + minutes) × 60 + seconds;
+    return ((hours * 60) + minutes) * 60 + seconds;
 }
 
 int main() {
@@ -30,37 +30,73 @@ int main() {
 
         int endHour, endMin, endSec;
         cout << "Enter the time they finished: " << "\n" << ">> ";
-        cin >> endHour >> endMin >> endSec;
+        cin >> endHour 
+            >> endMin
+            >> endSec;
 
         noOfComps += 1;
 
-        int curElapsedHours = (endHour > startHour) ? endHour - startHour : 24 - endHour + startHour;
-
-        int curElapsedMinutes = (endMin > startMin) ? endMin - startMin : 60 - startMin + endMin;
-
-        int curElapsedSeconds = (endSec > startSec) ? endSec - startSec : 60 - startSec + endSec;
+        /*
+         * If the end time is before the start time, we know that we have passed midnight.
+         * Thus, to get the true elapsed hours, we must get the difference between the start time and midnight,
+         * and add it to how many hours elapsed after midnight. I.e:
+         * To get the hours between the start-time and midnight, as in startTime + x = 24, we simplify to
+         * x = 24 - startTime. Then, we just add the hours after
+         * midnight to this time, since 0 + x = x. We do the same for minutes and seconds.
+         * In this way we make a base accounting for passing the crossover points.
+         */
+        int curElapsedHours   = (endHour > startHour) ? endHour - startHour : 24 - startHour + endHour;
+        int curElapsedMinutes = (endMin > startMin)   ? endMin  - startMin  : 60 - startMin  + endMin;
+        int curElapsedSeconds = (endSec > startSec)   ? endSec  - startSec  : 60 - startSec  + endSec;
 
         /*
-         * Instead of wasting time comparing hours and minutes and seconds, convert to just seconds and see which is bigger
+         * Now we must do some accounting. Let's list what we know:
+         * If the minutes are equal, there must have passed an hour.
+         * Same with seconds.
+         * 
          */
-        curSecs = timeToSeconds(curElapsedHours, curElapsedMinutes, curElapsedSeconds);
-        curWinSecs = timeToSeconds(elapsedHours, elapsedMinutes, elapsedSeconds);
+        if (endSec < startSec || (endSec == 0 && startSec == 0)) {
+            curElapsedMinutes -= 1;
+        }
+        if (endMin < startMin || (endMin == 0 && startMin == 0)) {
+            curElapsedHours   -= 1;
+        }
+        if (curElapsedSeconds == 60) {
+            curElapsedMinutes += 1;
+            curElapsedSeconds = 0;
+        }
+        if (curElapsedMinutes == 60) {
+            curElapsedHours += 1;
+            curElapsedMinutes = 0;
+        }
+        if (curElapsedHours == 24) {
+            curElapsedHours = 0;
+        }
 
-        if(curSecs < curWinSecs) {
-            elapsedHours = curElapsedHours;
+        /*
+         * Instead of wasting time comparing hours and minutes and seconds,
+         * convert to just seconds and see which is bigger
+         */
+        int curSecs    = timeToSeconds(curElapsedHours, curElapsedMinutes, curElapsedSeconds);
+        int curWinSecs = timeToSeconds(elapsedHours, elapsedMinutes, elapsedSeconds);
+
+        if(curSecs < curWinSecs || curWinSecs == 0) {
+            elapsedHours   = curElapsedHours;
             elapsedMinutes = curElapsedMinutes;
             elapsedSeconds = curElapsedSeconds;
-            winningRunner = currentRunner;
+            winningRunner  = currentRunner;
         }
     }
     if (noOfComps == 0) {
         cout << "No competitors were entered." << "\n";
+        cout << "The program ends. Good-bye!" << "\n";
         return 0;
     }
 
     cout << "Winner is starting number: " << winningRunner << "\n";
-    cout << "Time elapsed: " << elapsedHours << ":" << elapsedMinutes << ":" << elapsedSeconds << "\n";
+    cout << "Time elapsed: " << elapsedHours << " hours, " << elapsedMinutes << " minutes, and " << elapsedSeconds << " seconds." << "\n";
     cout << "Number of competitors: " << noOfComps << "\n";
+    cout << "The program ends. Good-bye!" << "\n";
     return 0;
 }
 
